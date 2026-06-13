@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: seerynx
+
+resources:
+  - namespace.yaml
+  - postgres.yaml
+  - mosquitto.yaml
+  - inference.yaml
+  - api.yaml
+  - frontend.yaml
+  - networkpolicy.yaml
+  - ingress.yaml
+
+images:
+  - name: seerynx-api
+    newName: __REGISTRY__/seerynx-api
+    newTag: latest
+  - name: seerynx-inference
+    newName: __REGISTRY__/seerynx-inference
+    newTag: latest
+  - name: seerynx-frontend
+    newName: __REGISTRY__/seerynx-frontend
+    newTag: latest

@@ -1,0 +1,18 @@
+[project]
+name = "seerynx-feeder"
+version = "0.1.0"
+description = "Seerynx feeder sensor node — captures camera frames and audio chunks from a Raspberry Pi and publishes them via MQTT for bird species identification."
+requires-python = ">=3.13"
+dependencies = [
+    "adafruit-circuitpython-dht>=4.0.12",
+    "ai-edge-litert>=2.1.5",
+    "numpy>=2.4.6",
+    "paho-mqtt>=2.1.0",
+    "pillow>=11.0.0",
+    "rpi-gpio>=0.7.1",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+]

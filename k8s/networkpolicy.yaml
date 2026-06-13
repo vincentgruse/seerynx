@@ -1,0 +1,128 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: seerynx
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-ingress
+  namespace: seerynx
+spec:
+  podSelector:
+    matchLabels:
+      app: seerynx-frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+        - ipBlock:
+            cidr: __CLUSTER_IP__/32
+      ports:
+        - protocol: TCP
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-ingress
+  namespace: seerynx
+spec:
+  podSelector:
+    matchLabels:
+      app: seerynx-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: seerynx-inference
+        - podSelector:
+            matchLabels:
+              app: seerynx-frontend
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+        - ipBlock:
+            cidr: __CLUSTER_IP__/32
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-inference-ingress
+  namespace: seerynx
+spec:
+  podSelector:
+    matchLabels:
+      app: seerynx-inference
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mosquitto
+        - ipBlock:
+            cidr: __CLUSTER_IP__/32
+      ports:
+        - protocol: TCP
+          port: 8001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-mosquitto-ingress
+  namespace: seerynx
+spec:
+  podSelector:
+    matchLabels:
+      app: mosquitto
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: seerynx-inference
+        - ipBlock:
+            cidr: __CLUSTER_IP__/32
+        - ipBlock:
+            cidr: __FEEDER_IP__/32
+      ports:
+        - protocol: TCP
+          port: 1883
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-postgres-ingress
+  namespace: seerynx
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: postgres
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: seerynx-api
+        - ipBlock:
+            cidr: __CLUSTER_IP__/32
+      ports:
+        - protocol: TCP
+          port: 5432

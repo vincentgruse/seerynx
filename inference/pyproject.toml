@@ -1,0 +1,19 @@
+[project]
+name = "seerynx-inference"
+version = "0.1.0"
+description = "Seerynx inference pipeline — processes camera frames and audio chunks via MQTT, running EfficientDet, AIY Birds V1, and BirdNET models for bird species identification."
+requires-python = ">=3.12"
+dependencies = [
+    "ai-edge-litert>=2.1.5",
+    "aiomqtt>=2.5.1",
+    "birdnet>=0.2.16",
+    "httpx>=0.28.1",
+    "numpy>=1.26.4",
+    "pillow>=12.2.0",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+]

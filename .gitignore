@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+
+# Environment & secrets
+.env
+.env.k8s
+.env.local
+*.env
+certs/
+*.crt
+*.key
+
+# Kubernetes secrets & configs
+_out/
+
+# Node
+node_modules/
+frontend/dist/
+
+# ML Models
+inference/models/*.tflite
+feeder/models/*.tflite
+*.tar.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Auto-generated frontend client
+frontend/src/client/
+frontend/openapi.json
+frontend/src/routeTree.gen.ts
+
+# Inference assets
+inference/assets/
+
+# Misc
+*.log
+
+# Scripts
+scripts/
+
+# Rendered k8s manifests
+k8s/.rendered/

@@ -1,0 +1,26 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libopenblas-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install uv
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+
+USER appuser
+
+COPY --chown=appuser:appuser inference/pyproject.toml inference/uv.lock ./
+RUN uv sync --frozen --no-dev
+
+COPY --chown=appuser:appuser inference/ .
+
+ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH="/app"
+
+CMD ["python", "main.py"]
